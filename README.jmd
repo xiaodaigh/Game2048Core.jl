@@ -1,10 +1,6 @@
 # Game2048Core.jl
 
-This is meant to be a minimalist implementation of the game 2048 aimed at performance but without
-any visual components. To play the game of
-
-The original intention of the repos is to use it to develop Reinforcement Learning algorithms with
-2048.
+This is a minimalist implementation of the game 2048. The aim is to have a high-performance backbone. So there aren't any visual components to play the game.
 
 ## The environment
 
