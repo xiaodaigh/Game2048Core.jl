@@ -1,4 +1,4 @@
-# the code in here is intend to help make the move lookups table
+# the code in here is intended to help make the move lookups table
 # need to be run once only
 
 function rowvec2uint16(col::Vector{Int})
