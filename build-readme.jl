@@ -1,9 +1,3 @@
-using Weave
-if false
-    using Pkg
-    cd("c:/git/Game2048Core/")
-    Pkg.activate("./weave-env")
-end
-
+cd(@__DIR__)
 using Weave
 weave("README.jmd", out_path=:pwd, doctype="github")
