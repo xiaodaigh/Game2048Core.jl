@@ -317,12 +317,31 @@ function Base.maximum(bb::Bitboard)
     end
 end
 
-function score(bb::Bitboard)
+function score2(bb::Bitboard)
     mapreduce(+, 0:4:60) do s
         1 << ((bb.board >> s) & MASK)
     end
 end
 
+function make_score_lookup()
+    u = UInt64.(0:15)
+    res = Vector{Int32}(undef, 2^16)
+    for (i1, i2, i3, i4) in Iterators.product(u, u, u, u)
+        bitboard_row = (i1 << 12) | (i2 << 8) | (i3 << 4) | i4
+        res[bitboard_row+1] = score2(Bitboard(bitboard_row)) - 12
+    end
+    res
+end
+
+const SCORE = make_score_lookup()
+
+
+function score(bitboard::Bitboard)
+    mapreduce(+, 0:16:48) do s
+        idx = (bitboard.board >> s) & ROWMASK
+        @inbounds SCORE[idx+1]
+    end
+end
 
 function value(state::Bitboard)
     ## comptue the value
