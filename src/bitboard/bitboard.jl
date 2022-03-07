@@ -328,27 +328,17 @@ function make_score_lookup()
     res = Vector{Int32}(undef, 2^16)
     for (i1, i2, i3, i4) in Iterators.product(u, u, u, u)
         bitboard_row = (i1 << 12) | (i2 << 8) | (i3 << 4) | i4
-        res[bitboard_row+1] = score2(Bitboard(bitboard_row)) - 12
+        bb = Bitboard(bitboard_row)
+        @inbounds res [bitboard_row + 1] = score2(bb) - count0(bb)
     end
     res
 end
 
 const SCORE = make_score_lookup()
 
-
 function score(bitboard::Bitboard)
     mapreduce(+, 0:16:48) do s
         idx = (bitboard.board >> s) & ROWMASK
         @inbounds SCORE[idx+1]
     end
-end
-
-function value(state::Bitboard)
-    ## comptue the value
-    # maxtile = maximum(state)
-    # val = maxtile <= 11 ? exp(maxtile - 11) : 2 << (maxtile - 12)
-    # val = Int(maxtile >= 11)
-    # return val
-
-    sum(2 .<< bitboard_to_array(state)) / (2 << 31)
 end
